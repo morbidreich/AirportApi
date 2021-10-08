@@ -9,7 +9,7 @@ import java.util.List;
 
 @RestController
 public class AirportController {
-    
+
     @Autowired
     private AirportService airportService;
 

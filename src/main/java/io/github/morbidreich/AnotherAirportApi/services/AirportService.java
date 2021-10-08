@@ -1,6 +1,8 @@
 package io.github.morbidreich.AnotherAirportApi.services;
 
 import io.github.morbidreich.AnotherAirportApi.entities.Airport;
+import io.github.morbidreich.AnotherAirportApi.repos.AirportRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -10,37 +12,30 @@ import java.util.List;
 @Service
 public class AirportService {
 
-    List<Airport> airports = new ArrayList(Arrays.asList(
-            new Airport("EPWA", "WAW", "Chopin Airport"),
-            new Airport("EPKK", "KRK", "Kraków Balice Cośtam"))
-    );
+    @Autowired
+    private AirportRepository airportRepository;
 
     public List<Airport> getAirports() {
+        List<Airport> airports = new ArrayList<>();
+        airportRepository.findAll().forEach(airports::add);
         return airports;
     }
 
     public Airport getAirport(String icaoCode) {
-        return airports.stream().filter(
-                a -> a.getIcaoCode().equals(icaoCode.toUpperCase()))
-                .findFirst().get();
+        return airportRepository.findById(icaoCode.toUpperCase()).get();
     }
 
     public void addAirport(Airport airport) {
-        airports.add(airport);
+        airport.setIcaoCode(airport.getIcaoCode().toUpperCase());
+        airportRepository.save(airport);
     }
 
     public void updateAirport(String icaoCode, Airport airport) {
-        for (int i = 0; i < airports.size(); i++) {
-            Airport a = airports.get(i);
-            if (a.getIcaoCode().equals(icaoCode.toUpperCase())) {
-                airports.set(i, airport);
-                return;
-            }
-        }
-
+        airport.setIcaoCode(airport.getIcaoCode().toUpperCase());
+        airportRepository.save(airport);
     }
 
     public void deleteAirport(String icaoCode) {
-        airports.removeIf(a -> a.getIcaoCode().equals(icaoCode.toUpperCase()));
+        airportRepository.deleteById(icaoCode.toUpperCase());
     }
 }

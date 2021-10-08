@@ -1,11 +1,17 @@
 package io.github.morbidreich.AnotherAirportApi.entities;
 
+import javax.persistence.Entity;
+import javax.persistence.Id;
+
+@Entity
 public class Airport {
 
+    @Id
     private String icaoCode;
     private String iataCode;
     private String fullName;
 
+    @SuppressWarnings("unused")
     public Airport() {
     }
 
